@@ -8,35 +8,44 @@ rownames(countData)= paste(countData$Gene_stable_ID, countData$chr,sep="_")
 
 #Get SARs transcripts
 SARS=countData[countData$chr == "SARSCOV2_ASM985889v3", ] 
-#Extraxt EB and annotated genes separately
+#Extraxt EB and annotated genes separately. Combine with SARS
 EB=countData[countData$status == "novel", ] 
 ANN=countData[countData$status == "annotated", ] 
-
-
+EB_Counts=rbind(EB, SARS)
+ANN_Counts=rbind(ANN, SARS)
 #Select only ID columns that comtain counts. 
-countData=select(countData,contains("SRR"))
+ANN_Counts=select(ANN_Counts,contains("SRR"))
+EB_Counts=select(EB_Counts,contains("SRR"))
 #Round to nearest int
-countData=round(countData,0)
+ANN_Counts=round(ANN_Counts,0) 
+EB_Counts=round(EB_Counts,0) 
+
 ##Read in expermental design
 metadata = read.table("Design.tsv",header=TRUE,row.names=1,sep = '\t')
 
-
-#Get sample names
-samples=row.names(metadata)
-
-
 #Should return TRUE
-#all(rownames(metadata) == colnames(countData))
+#all(rownames(metadata) == colnames(EB_Counts))
+
 
 ##Make DEseq2 object
-dds = DESeqDataSetFromMatrix(countData = countData,colData = metadata,design = ~ Sample)
+dds = DESeqDataSetFromMatrix(countData = EB_Counts,colData = metadata,design = ~ Sample)
 dds = DESeq(dds)
 #Contrast case vs control
-result = results(dds, contrast=c("Sample","EVC","WT"))
+result = results(dds, contrast=c("Sample","case","control"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
 result = cbind(miRNA_ID = rownames(result), result)
+write.table(result,"CasevsControl_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 
-write.table(result,"EVCvsWT_DGE.tsv" ,sep = '\t',row.names = FALSE)
+##Make DEseq2 object
+dds = DESeqDataSetFromMatrix(countData = ANN_Counts,colData = metadata,design = ~ Sample)
+dds = DESeq(dds)
+#Contrast case vs control
+result = results(dds, contrast=c("Sample","case","control"))
+## Remove rows with NA
+result = result[complete.cases(result),]
+#Put GeneID as column
+result = cbind(miRNA_ID = rownames(result), result)
+write.table(result,"CasevsControl_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
