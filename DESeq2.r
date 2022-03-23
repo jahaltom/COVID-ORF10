@@ -1,7 +1,20 @@
 library(DESeq2)
+library(dplyr)
 
 #Read in count information.
-countData = read.table("results_Count_gene.tsv",header=TRUE,row.names=1,sep = '\t')
+countData = read.table("Count.filtered.tsv",header=TRUE,sep = '\t')
+#X an Y gene names can be the same. This makes them unique. Row is set to this unique value. 
+rownames(countData)= paste(countData$Gene_stable_ID, countData$chr,sep="_")
+
+#Get SARs transcripts
+SARS=countData[countData$chr == "SARSCOV2_ASM985889v3", ] 
+#Extraxt EB and annotated genes separately
+EB=countData[countData$status == "novel", ] 
+ANN=countData[countData$status == "annotated", ] 
+
+
+#Select only ID columns that comtain counts. 
+countData=select(countData,contains("SRR"))
 #Round to nearest int
 countData=round(countData,0)
 ##Read in expermental design
