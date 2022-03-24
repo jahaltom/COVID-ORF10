@@ -4,7 +4,7 @@ library(dplyr)
 #Read in count information.
 countData = read.table("Count.filtered.tsv",header=TRUE,sep = '\t')
 #X an Y gene names can be the same. This makes them unique. Row is set to this unique value. 
-rownames(countData)= paste(countData$Gene_name,countData$Gene_stable_ID, countData$chr,sep="_")
+rownames(countData)= paste(countData$Gene_name,countData$Gene_stable_ID, countData$chr,sep="$")
 
 #Get SARs transcripts
 SARS=countData[countData$chr == "SARSCOV2_ASM985889v3", ] 
@@ -39,7 +39,7 @@ result = results(dds, contrast=c("Condition","Cont","EVC"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"ContvsEVC_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -47,7 +47,7 @@ result = results(dds, contrast=c("Condition","Cont","MUT"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"ContvsMUT_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -55,7 +55,7 @@ result = results(dds, contrast=c("Condition","Cont","WT"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"ContvsWT_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -63,7 +63,7 @@ result = results(dds, contrast=c("Condition","WT","MUT"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"WTvsMUT_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -71,7 +71,7 @@ result = results(dds, contrast=c("Condition","MUT","EVC"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"MUTvsEVC_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -79,7 +79,7 @@ result = results(dds, contrast=c("Condition","WT","EVC"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"WTvsEVC_EB_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 ##############################Annotated
@@ -92,7 +92,7 @@ result = results(dds, contrast=c("Condition","Cont","EVC"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"ContvsEVC_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -100,7 +100,7 @@ result = results(dds, contrast=c("Condition","Cont","MUT"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"ContvsMUT_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -108,7 +108,7 @@ result = results(dds, contrast=c("Condition","Cont","WT"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"ContvsWT_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -116,7 +116,7 @@ result = results(dds, contrast=c("Condition","WT","MUT"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"WTvsMUT_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -124,7 +124,7 @@ result = results(dds, contrast=c("Condition","MUT","EVC"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"MUTvsEVC_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
 #Contrast case vs control
@@ -132,6 +132,6 @@ result = results(dds, contrast=c("Condition","WT","EVC"))
 ## Remove rows with NA
 result = result[complete.cases(result),]
 #Put GeneID as column
-result = cbind(miRNA_ID = rownames(result), result)
+result = cbind(ID = rownames(result), result)
 write.table(result,"WTvsEVC_Annotated_DGE.tsv" ,sep = '\t',row.names = FALSE)
 
