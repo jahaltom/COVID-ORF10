@@ -4,7 +4,7 @@ library(dplyr)
 #Read in count information.
 countData = read.table("Count.filtered.tsv",header=TRUE,sep = '\t')
 #X an Y gene names can be the same. This makes them unique. Row is set to this unique value. 
-rownames(countData)= paste(countData$Gene_stable_ID, countData$chr,sep="_")
+rownames(countData)= paste(countData$Gene_name,countData$Gene_stable_ID, countData$chr,sep="_")
 
 #Get SARs transcripts
 SARS=countData[countData$chr == "SARSCOV2_ASM985889v3", ] 
