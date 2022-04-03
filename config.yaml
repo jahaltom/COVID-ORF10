@@ -1,0 +1,7 @@
+DIR: 'out'
+THREADS: 16
+#Specify file type: fastq,fq, or bam
+FileType: 'fq'
+#Specify layout: Paired or Single
+Layout: 'Single'
+Transcriptome: 'human_data/human_sars_tr_EB_decoy.fasta'
